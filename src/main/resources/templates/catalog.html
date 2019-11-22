@@ -1,0 +1,30 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"> </head>
+<nav th:replace="fragments/header :: nav"> </nav>
+<div class="container">
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Author</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tr th:each="book : ${books}">
+                <td>
+                <span th:text="${book.id}"> Id </span></td>
+                <td>
+                     <div th:each="author : ${book.authors}">
+                         <span th:text="${author.firstName}"> AuthorName </span>
+                        <span th:text="${author.lastName}"> AuthorLastName </span>
+                    </div>
+                </td>
+                <td><a th:href="@{/book/{id}(id=${book.id})}"><span th:text="${book.name}"> Name </span></a></td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"> </footer>
+

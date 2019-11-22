@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<nav th:replace="fragments/header :: nav"></nav>
+<div class="container">
+    <div class="row mt-5">
+        <div class="card w-75 m-auto mt-5">
+            <div class="card-body">
+                <form action="front-controller" method="post">
+                    <input type="hidden" name="command" value="takeBook"/>
+                    <input type="hidden" name="bookId" value="${requestScope.book.id}"/>
+                    <div th:if="${takeBookSuccessful != null}" th:text="takeBookSuccessful" class="alert alert-success"
+                         role="alert">
+                    </div>
+                    <h5 class="card-title" th:text="${book.name}"></h5>
+                    <h6 class="card-title">by
+                        <div th:each="author : ${book.authors}">
+                            <span th:text="${author.firstName}"> AuthorName </span>
+                            <span th:text="${author.lastName}"> AuthorLastName </span>
+                        </div>
+                    </h6>
+                    <p class="card-text" th:text="${book.description}"> Description </p>
+               <!--     <button type="submit"
+                    <c:if test="${requestScope.bookIsAlreadyTaken}"> disabled class="btn btn-secondary"</c:if>
+                    <c:if test="${!requestScope.bookIsAlreadyTaken}"> class="btn btn-primary"</c:if>
+                    >
+                    <fmt:message key="Take_for_1_month"/>
+                    </button>
+                    <c:choose>
+                        <c:when test="${not empty takeBookSuccessful}">
+                            <a href="javascript:history.go(-2)" class="btn btn-primary">
+                                <fmt:message key="Back"/>
+                            </a>
+                        </c:when>
+                        <c:when test="${empty takeBookSuccessful}">
+                            <a href="javascript:history.go(-1)" class="btn btn-primary">
+                                <fmt:message key="Back"/>
+                            </a>
+                        </c:when>
+                    </c:choose>-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</html>
