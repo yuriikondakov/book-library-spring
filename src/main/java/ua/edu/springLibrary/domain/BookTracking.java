@@ -1,22 +1,25 @@
 package ua.edu.springLibrary.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import ua.edu.springLibrary.entity.BookEntity;
-import ua.edu.springLibrary.entity.UserEntity;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookTracking {
-
     private Integer id;
 
-    private UserEntity userEntity;
+    @NotNull
+    private User user;
 
-    private BookEntity bookEntity;
+    @NotNull
+    private Book book;
 
+    @NotNull
     private LocalDate issue_date;
-
     private LocalDate return_date;
-
 }

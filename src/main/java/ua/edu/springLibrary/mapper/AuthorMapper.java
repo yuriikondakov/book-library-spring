@@ -6,7 +6,7 @@ import ua.edu.springLibrary.entity.AuthorEntity;
 
 @Component
 public class AuthorMapper {
-    Author mapAuthorEntityToAuthor(AuthorEntity authorEntity) {
+    public Author mapAuthorEntityToAuthor(AuthorEntity authorEntity) {
         return new Author(authorEntity.getId(), authorEntity.getFirstName(), authorEntity.getLastName());
     }
 

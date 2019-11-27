@@ -5,10 +5,9 @@
     <div class="row mt-5">
         <div class="card w-75 m-auto mt-5">
             <div class="card-body">
-                <form action="front-controller" method="post">
-                    <input type="hidden" name="command" value="takeBook"/>
+                <form th:action="@{/book/{id}(id=${book.id})}" method="post">
                     <input type="hidden" name="bookId" value="${requestScope.book.id}"/>
-                    <div th:if="${takeBookSuccessful != null}" th:text="takeBookSuccessful" class="alert alert-success"
+                    <div th:if="${param.takeBookSuccessful}" th:text="#{takeBookSuccessful}" class="alert alert-success"
                          role="alert">
                     </div>
                     <h5 class="card-title" th:text="${book.name}"></h5>
@@ -19,24 +18,18 @@
                         </div>
                     </h6>
                     <p class="card-text" th:text="${book.description}"> Description </p>
-               <!--     <button type="submit"
-                    <c:if test="${requestScope.bookIsAlreadyTaken}"> disabled class="btn btn-secondary"</c:if>
-                    <c:if test="${!requestScope.bookIsAlreadyTaken}"> class="btn btn-primary"</c:if>
+                    <button type="submit" class="btn"
+                            th:classappend="${bookIsAlreadyTaken} ? btn-secondary : btn-primary"
+                            th:disabled="${bookIsAlreadyTaken}"
+                            th:text="#{Take_for_1_month}"
                     >
-                    <fmt:message key="Take_for_1_month"/>
                     </button>
-                    <c:choose>
-                        <c:when test="${not empty takeBookSuccessful}">
-                            <a href="javascript:history.go(-2)" class="btn btn-primary">
-                                <fmt:message key="Back"/>
-                            </a>
-                        </c:when>
-                        <c:when test="${empty takeBookSuccessful}">
-                            <a href="javascript:history.go(-1)" class="btn btn-primary">
-                                <fmt:message key="Back"/>
-                            </a>
-                        </c:when>
-                    </c:choose>-->
+                    <a href="javascript:history.go(-2)" class="btn btn-primary" th:if="${param.takeBookSuccessful}"
+                       th:text="#{Back}">
+                    </a>
+                    <a href="javascript:history.go(-1)" class="btn btn-primary" th:if="${param.takeBookSuccessful == null}"
+                        th:text="#{Back}">
+                    </a>
                 </form>
             </div>
         </div>

@@ -12,6 +12,7 @@ public class Book {
 
     private Integer id;
 
+    @NotNull(message = "Authors cannot be null")
     private List<Author> authors;
 
     @NotNull(message = "Name cannot be null")

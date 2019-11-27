@@ -1,10 +1,7 @@
 package ua.edu.springLibrary.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import lombok.NoArgsConstructor;
 import ua.edu.springLibrary.domain.Role;
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user")
 public class UserEntity {
     @Id
@@ -23,7 +21,7 @@ public class UserEntity {
     @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name="email", nullable = false)
+    @Column(name="email", nullable = false, unique = true)
     private String email;
 
     @Column(name="password", nullable = false)

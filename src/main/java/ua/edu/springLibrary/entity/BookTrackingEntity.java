@@ -1,18 +1,16 @@
 package ua.edu.springLibrary.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "book_tracking")
 public class BookTrackingEntity {
     @Id
@@ -32,7 +30,7 @@ public class BookTrackingEntity {
     private LocalDate issue_date;
 
     @Column(name = "return_date")
-    private LocalDate return_date;
+    private LocalDate returnDate;
 
 
 }

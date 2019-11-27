@@ -1,6 +1,7 @@
 package ua.edu.springLibrary.mapper;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.edu.springLibrary.domain.Book;
 import ua.edu.springLibrary.entity.BookEntity;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class BookMapper {
     private final AuthorMapper authorMapper;
 
+    @Autowired
     public BookMapper(AuthorMapper authorMapper) {
         this.authorMapper = authorMapper;
     }
@@ -25,16 +27,14 @@ public class BookMapper {
                 bookEntity.getShelfId());
     }
 
-   /* public BookEntity mapBookToBookEntity(Book book) {
-        return BookEntity.builder()
-                .withId(book.getId())
-                .withName(book.getName())
-                *//*.withAuthors(book.getAuthors().stream()
-                        .map(authorMapper::mapAuthorToAuthorEntity)
-                        .collect(Collectors.toList()))*//*
-                .withDescription(book.getDescription())
-                .withShelfId(book.getShelfId())
-                *//* .withIssueDate(book.getIssueDate())
-                 .withReturnDate(book.getReturnDate())*//*
-                .build();*/
+    public BookEntity mapBookToBookEntity(Book book) {
+        BookEntity bookEntity = new BookEntity();
+        bookEntity.setId(book.getId());
+        bookEntity.setName(book.getName());
+        bookEntity.setDescription(book.getDescription());
+        bookEntity.setShelfId(1);
+        bookEntity.setAuthors(book.getAuthors().stream()
+                .map(authorMapper::mapAuthorToAuthorEntity).collect(Collectors.toList()));
+        return bookEntity;
+    }
 }

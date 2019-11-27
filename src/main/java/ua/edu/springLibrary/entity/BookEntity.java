@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Table(name = "book")
 public class BookEntity {
     @Id
@@ -23,7 +23,7 @@ public class BookEntity {
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "author_id")}
     )
-    private List<AuthorEntity> authors = new ArrayList<>();
+    private List<AuthorEntity> authors;
 
     @Column(name = "name", nullable = false)
     private String name;
