@@ -1,0 +1,39 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<nav th:replace="fragments/header :: nav"></nav>
+<div class="container">
+    <div class="row">
+        <table class="table table-striped mt-3">
+            <thead>
+            <tr class="text-center">
+                <th th:text="#{Id}"></th>
+                <th th:text="#{Author}"></th>
+                <th style="width: 50%" th:text="#{Name}"></th>
+                <th th:text="#{IssueDate}"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tr th:each="book : ${userBooksMap}">
+                <td class="text-center" th:text="${book.getKey().id}"></td>
+                <td>
+                    <div th:each="author : ${book.getKey().authors}">
+                        <span th:text="${author.firstName}"> AuthorName </span>
+                        <span th:text="${author.lastName}"> AuthorLastName </span>
+                    </div>
+                </td>
+                <td>
+                    <a th:href="@{/book/{id}(id=${book.getKey().id})}" class="card-link"
+                       th:text="${book.getKey().name}"></a>
+                </td>
+                <td class="text-center" th:text="${book.value}"></td>
+                <td class="text-center" style="vertical-align: middle">
+                    <a th:href="@{/returnbook/{id}(id=${book.getKey().id})}" class="btn btn-info"
+                       th:text="#{Return_book}">
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</html>

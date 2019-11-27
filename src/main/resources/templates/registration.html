@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<nav th:replace="fragments/header :: nav"></nav>
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 mt-5">
+            <form data-toggle="validator" th:action="@{/registration}" method="post" th:object="${user}">
+                <div class="form-group">
+                    <label for="InputName" th:text="#{UserName}"></label>
+                    <input type="text" class="form-control" th:field="*{name}" id="InputName"
+                           th:placeholder="#{UserName}" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="InputEmail1">Email address</label>
+                    <input type="email" class="form-control" id="InputEmail1"
+                           aria-describedby="emailHelp1" th:placeholder="#{EnterEmail}" th:field="*{email}" required>
+                    <div class="alert alert-danger" th:uerrors="*{email}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="InputPassword" th:text="#{Password}"></label>
+                    <input type="password" data-minlength="5" class="form-control" th:field="*{password}"
+                           id="InputPassword" th:placeholder="#{Password}" required>
+                    <small id="emailHelp" class="form-text text-muted" th:text="#{Atleast5symbols}"></small>
+                </div>
+                <div class="form-group">
+                    <label for="inputPasswordConfirm" th:text="#{RepeatPassword}"></label>
+                    <input type="password" class="form-control" data-th-name="confirmPassword"
+                           id="inputPasswordConfirm" data-match="#InputPassword"
+                           data-match-error="Whoops, these don't match" th:placeholder="#{Password}" required>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                <input type="hidden" data-th-name="role" value="USER">
+                <button type="submit" class="btn btn-primary" th:text="#{Signup}"></button>
+                <div class="alert alert-success mt-3" role="alert"
+                     th:if="${successMessage} != null" th:utext="${successMessage}">
+                </div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</html>
+

@@ -1,0 +1,38 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<nav th:replace="fragments/header :: nav"></nav>
+<div class="container">
+    <div class="row mt-5">
+        <div class="card w-75 m-auto mt-5">
+            <h5 class="card-header" th:text="#{AddingBook}"></h5>
+            <div class="card-body">
+                <form th:action="@{/admin/addbook}" method="post">
+                    <div class="alert alert-success" role="alert" th:if="${param.addBookSuccessful}"></div>
+                    <div class="form-group">
+                        <label for="FormControlSelect1" th:text="#{Author}"></label>
+                        <select class="form-control" id="FormControlSelect1" >
+                            <option th:each="author : ${authorList}" th:value="${author.id}"
+                                    th:text="${author.firstName + ' ' + author.lastName}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="InputName" th:text="#{Name}"/></label>
+                        <input type="text" class="form-control" name="name" th:value="${name}"
+                               id="InputName" th:placeholder="#{Name}" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="InputDescription" th:text="#{Description}"/>
+                        </label>
+                        <input type="text" class="form-control" name="description" th:value="${description}"
+                               id="InputDescription" th:placeholder="#{Description}" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3" th:text="#{AddBook}"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+</html>
