@@ -56,21 +56,16 @@ public class LoginController {
     @PostMapping(value = "/registration")
     public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
-        System.out.println(bindingResult.getModel());
         User userExists = userService.findUserByEmail(user.getEmail());
         if (userExists != null) {
-            System.out.println("here2");
             bindingResult
                     .rejectValue("email", "error.user",
                             "There is already a user registered with the email provided");
         }
         if (bindingResult.hasErrors()) {
-            System.out.println("here3");
             modelAndView.setViewName("registration");
         } else {
-            System.out.println("here4");
             userService.saveUser(user);
-            System.out.println("here5");
             modelAndView.addObject("successMessage", "User has been registered successfully");
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("registration");

@@ -14,18 +14,18 @@
             </tr>
             </thead>
             <tr th:each="book : ${userBooksMap}">
-                <td class="text-center" th:text="${book.getKey().id}"></td>
+                <td class="text-center" th:text="${book.getValue().id}"></td>
                 <td>
-                    <div th:each="author : ${book.getKey().authors}">
+                    <div th:each="author : ${book.getValue().authors}">
                         <span th:text="${author.firstName}"> AuthorName </span>
                         <span th:text="${author.lastName}"> AuthorLastName </span>
                     </div>
                 </td>
                 <td>
-                    <a th:href="@{/book/{id}(id=${book.getKey().id})}" class="card-link"
-                       th:text="${book.getKey().name}"></a>
+                    <a th:href="@{/book/{id}(id=${book.getValue().id})}" class="card-link"
+                       th:text="${book.getValue().name}"></a>
                 </td>
-                <td class="text-center" th:text="${book.value}"></td>
+                <td class="text-center" th:text="${book.getKey().getIssue_date()}"></td>
                 <td class="text-center" style="vertical-align: middle">
                     <a th:href="@{/returnbook/{id}(id=${book.getKey().id})}" class="btn btn-info"
                        th:text="#{Return_book}">

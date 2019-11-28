@@ -1,5 +1,6 @@
 package ua.edu.springLibrary.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,6 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
@@ -24,11 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
-
-    public SecurityConfig(DataSource dataSource, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.dataSource = dataSource;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -46,11 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/registration", "/international").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("USER")
-                .antMatchers("/book/**","/mybooks").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/book/**", "/mybooks", "/init").hasAnyAuthority("ADMIN", "USER")
                 .anyRequest()
                 .authenticated().and().csrf().disable().formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/mybooks")
+                .defaultSuccessUrl("/init")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()

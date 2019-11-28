@@ -29,7 +29,7 @@ public class BookMapper {
 
     public BookEntity mapBookToBookEntity(Book book) {
         BookEntity bookEntity = new BookEntity();
-        bookEntity.setId(book.getId());
+       // bookEntity.setId(book.getId());
         bookEntity.setName(book.getName());
         bookEntity.setDescription(book.getDescription());
         bookEntity.setShelfId(1);

@@ -1,9 +1,8 @@
 package ua.edu.springLibrary.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ua.edu.springLibrary.domain.User;
+import ua.edu.springLibrary.entity.BookTrackingEntity;
 import ua.edu.springLibrary.entity.UserEntity;
 
 import java.util.stream.Collectors;
@@ -20,8 +19,14 @@ public class UserMapper {
                 userEntity.getPhoneNumber(),
                 userEntity.getRole(),
                 userEntity.getBookTrackingEntityList().stream()
-                        .filter(b -> b.getReturnDate()==null)
-                        .map(b -> b.getBookEntity().getId()).collect(Collectors.toList()));
+                        .filter(b -> b.getReturnDate() == null)
+                        .map(BookTrackingEntity::getId)
+                        .collect(Collectors.toList()),
+                userEntity.getBookTrackingEntityList().stream()
+                        .filter(b -> b.getReturnDate() == null)
+                        .map(bookTrackingEntity -> bookTrackingEntity.getBookEntity().getId())
+                        .collect(Collectors.toList())
+        );
     }
 
     public UserEntity mapUserToUserEntity(User user) {

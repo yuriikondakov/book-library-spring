@@ -17,7 +17,7 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_author",
             joinColumns = {@JoinColumn(name = "book_id")},

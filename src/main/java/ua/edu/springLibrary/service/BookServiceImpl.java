@@ -29,14 +29,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
-        List<Book> books = new ArrayList<>();
-         bookRepository.findAll()
-                .forEach(bookEntity -> books.add(bookMapper.mapBookEntityToBook(bookEntity)));
-        return books;
-    }
-
-    @Override
     public Book findById(Integer id) {
         return bookRepository.findById(id)
                 .map(bookMapper::mapBookEntityToBook)
@@ -58,5 +50,10 @@ public class BookServiceImpl implements BookService {
                     .map(bookMapper::mapBookEntityToBook).collect(Collectors.toList());
         }
         return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), size);
+    }
+
+    @Override
+    public void saveBook(Book book) {
+        bookRepository.save(bookMapper.mapBookToBookEntity(book));
     }
 }

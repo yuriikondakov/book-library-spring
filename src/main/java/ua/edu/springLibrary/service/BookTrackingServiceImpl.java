@@ -37,19 +37,16 @@ public class BookTrackingServiceImpl implements BookTrackingService {
     }
 
     @Override
-    public BookTracking findByUserAndBook(User user, Book book) {
-        BookTrackingEntity bookTrackingEntity = bookTrackingRepository
-                .findByUserEntityAndBookEntity(userRepository.findById(user.getId()).orElse(null),
-                        bookRepository.findById(book.getId()).orElse(null))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid parameters bookTracking"));
-        return bookTrackingMapper.mapBookTrackingEntityToBookTracking(bookTrackingEntity);
-    }
-
-    @Override
     public void returnBook(Integer bookTrackingId) {
         BookTrackingEntity bookTrackingEntity = bookTrackingRepository.findById(bookTrackingId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid bookTracking Id"));
         bookTrackingEntity.setReturnDate(LocalDate.now());
         bookTrackingRepository.save(bookTrackingEntity);
+    }
+
+    @Override
+    public BookTracking findById(Integer bookTrackingId) {
+        return bookTrackingRepository.findById(bookTrackingId)
+                .map(bookTrackingMapper::mapBookTrackingEntityToBookTracking).orElse(null);
     }
 }

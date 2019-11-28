@@ -31,5 +31,7 @@ public class User {
     @NotNull(message = "Role cannot be null")
     private Role role;
 
-    private List<Integer> bookIdList;
+    private List<Integer> bookTrackingIds;
+
+    private List<Integer> bookIds;
 }

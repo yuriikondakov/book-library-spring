@@ -7,7 +7,7 @@ import ua.edu.springLibrary.domain.User;
 public interface BookTrackingService {
     void saveBookTracking(User user, Integer bookId);
 
-    BookTracking findByUserAndBook(User user, Book book);
-
     void returnBook(Integer bookTrackingId);
+
+    BookTracking findById(Integer bookTrackingId);
 }

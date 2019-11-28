@@ -10,7 +10,11 @@ public class AuthorMapper {
         return new Author(authorEntity.getId(), authorEntity.getFirstName(), authorEntity.getLastName());
     }
 
-    public AuthorEntity mapAuthorToAuthorEntity(Author author) {
-        return new AuthorEntity(author.getId(), author.getFirstName(), author.getLastName());
+    AuthorEntity mapAuthorToAuthorEntity(Author author) {
+        AuthorEntity authorEntity = new AuthorEntity();
+        authorEntity.setId(author.getId());
+        authorEntity.setFirstName(author.getFirstName());
+        authorEntity.setLastName(author.getLastName());
+        return authorEntity;
     }
 }

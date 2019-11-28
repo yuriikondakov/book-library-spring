@@ -3,10 +3,12 @@ package ua.edu.springLibrary.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.edu.springLibrary.domain.Author;
+import ua.edu.springLibrary.domain.Book;
 import ua.edu.springLibrary.mapper.AuthorMapper;
 import ua.edu.springLibrary.repository.AuthorRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,4 +24,12 @@ public class AuthorServiceImpl implements AuthorService {
                 .forEach(authorEntity -> authors.add(authorMapper.mapAuthorEntityToAuthor(authorEntity)));
         return authors;
     }
+
+    @Override
+    public List<Author> getAuthorById(Integer id) {
+        return Collections.singletonList(authorRepository.findById(id)
+                .map(authorMapper::mapAuthorEntityToAuthor)
+                .orElse(null));
+    }
+
 }

@@ -1,7 +1,7 @@
 package ua.edu.springLibrary.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,32 +25,25 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @Scope("session")
 public class BookController {
     private final BookService bookService;
     private final BookTrackingService bookTrackingService;
     private final UserService userService;
 
-    @Autowired
-    public BookController(BookService bookService, BookTrackingService bookTrackingService, UserService userService) {
-        this.bookService = bookService;
-        this.bookTrackingService = bookTrackingService;
-        this.userService = userService;
-    }
-
     @GetMapping(value = "/book")
-    public ModelAndView getAllBooks(@RequestParam("page") Optional<Integer> page,
-                                    @RequestParam("size") Optional<Integer> size) {
+    public ModelAndView getAllBooks(@RequestParam("page") Integer page,
+                                    @RequestParam("size") Integer size) {
         ModelAndView modelAndView = new ModelAndView();
         log.debug("Get book by id");
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(10);
+        int currentPage = (page == null) ? 1 : page;
+        int pageSize = (size == null) ? 10 : size;
         Page<Book> bookPage = bookService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         modelAndView.addObject("bookPage", bookPage);
 
@@ -69,7 +62,7 @@ public class BookController {
     public String getBookById(@PathVariable("id") Integer bookId, Model model) {
         User user = getUser();
         log.debug(user.toString());
-        if (user.getBookIdList().stream().anyMatch(b -> b.equals(bookId))) {
+        if (user.getBookIds().stream().anyMatch(b -> b.equals(bookId))) {
             model.addAttribute("bookIsAlreadyTaken", true);
         }
         model.addAttribute("book", bookService.findById(bookId));
@@ -78,32 +71,24 @@ public class BookController {
 
     @PostMapping("/book/{id}")
     public String saveBook(@PathVariable("id") Integer bookId, Model model) {
-        User user = getUser();
-        log.debug(user.toString());
-        bookTrackingService.saveBookTracking(user, bookId);
+        bookTrackingService.saveBookTracking(getUser(), bookId);
         model.addAttribute("takeBookSuccessful", true);
         return "redirect:/book/{id}";
     }
 
     @GetMapping(value = "/mybooks")
-    public String getUserBooks(HttpSession session, Model model) {
-        User user = getUser();
-        session.setAttribute("user", user);
-        List<Book> userBooks = user.getBookIdList().stream().map(bookService::findById).collect(Collectors.toList());
-        Map<Book, String> userBooksToIssueDate = new HashMap<>();
-        for (Book book : userBooks) {
-            BookTracking bookTracking = bookTrackingService.findByUserAndBook(user, book);
-            userBooksToIssueDate.put(book, bookTracking.getIssue_date().toString());
+    public String getUserBooks(Model model) {
+        Map<BookTracking, Book> userBookTrackingToUserBook = new HashMap<>();
+        for (Integer bookTrackingId : getUser().getBookTrackingIds()) {
+            BookTracking bookTracking = bookTrackingService.findById(bookTrackingId);
+            userBookTrackingToUserBook.put(bookTracking, bookTracking.getBook());
         }
-        model.addAttribute("userBooksMap", userBooksToIssueDate);
+        model.addAttribute("userBooksMap", userBookTrackingToUserBook);
         return "user_books";
     }
 
     @GetMapping("/returnbook/{id}")
-    public String returnBook(@PathVariable("id") Integer bookId, Model model) {
-        User user = getUser();
-        log.debug(user.toString());
-        Integer bookTrackingId = bookTrackingService.findByUserAndBook(user, bookService.findById(bookId)).getId();
+    public String returnBook(@PathVariable("id") Integer bookTrackingId, Model model) {
         bookTrackingService.returnBook(bookTrackingId);
         model.addAttribute("returnBookSuccessful", true);
         return "redirect:/mybooks";
@@ -111,8 +96,15 @@ public class BookController {
 
     private User getUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userService.findUserByEmail(auth.getName());
+    }
+
+    @GetMapping("/init")
+    private String init(HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         user.setPassword("");
-        return user;
+        session.setAttribute("user", user);
+        return "redirect:/mybooks";
     }
 }

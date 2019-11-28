@@ -6,28 +6,28 @@
         <div class="card w-75 m-auto mt-5">
             <h5 class="card-header" th:text="#{AddingBook}"></h5>
             <div class="card-body">
-                <form th:action="@{/admin/addbook}" method="post">
+                <form th:action="@{/admin/addbook}" method="post" th:object="${book}">
                     <div class="alert alert-success" role="alert" th:if="${param.addBookSuccessful}"></div>
                     <div class="form-group">
                         <label for="FormControlSelect1" th:text="#{Author}"></label>
-                        <select class="form-control" id="FormControlSelect1" >
-                            <option th:each="author : ${authorList}" th:value="${author.id}"
+                        <select class="form-control" th:name="authorId" id="FormControlSelect1">
+                            <option th:each="author : ${authorList}"
+                                    th:value="${author.id}"
                                     th:text="${author.firstName + ' ' + author.lastName}">
                             </option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="InputName" th:text="#{Name}"/></label>
-                        <input type="text" class="form-control" name="name" th:value="${name}"
+                        <label for="InputName" th:text="#{Name}"></label>
+                        <input type="text" class="form-control" name="name" th:field="*{name}"
                                id="InputName" th:placeholder="#{Name}" required autofocus>
                     </div>
                     <div class="form-group">
-                        <label for="InputDescription" th:text="#{Description}"/>
-                        </label>
-                        <input type="text" class="form-control" name="description" th:value="${description}"
+                        <label for="InputDescription" th:text="#{Description}"></label>
+                        <input type="text" class="form-control" name="description" th:field="*{description}"
                                id="InputDescription" th:placeholder="#{Description}" required>
                     </div>
-
+                    <input type="hidden" data-th-name="shelfId" value="1">
                     <button type="submit" class="btn btn-primary mt-3" th:text="#{AddBook}"></button>
                 </form>
             </div>

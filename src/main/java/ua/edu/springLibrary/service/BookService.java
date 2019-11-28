@@ -7,9 +7,10 @@ import ua.edu.springLibrary.domain.Book;
 import java.util.List;
 
 public interface BookService {
-    List<Book> findAll();
 
     Book findById(Integer id);
 
     Page<Book> findPaginated(Pageable pageable);
+
+    void saveBook(Book book);
 }
