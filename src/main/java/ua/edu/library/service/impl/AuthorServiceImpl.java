@@ -29,6 +29,6 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> getAuthorById(Integer id) {
         return Collections.singletonList(authorRepository.findById(id)
                 .map(authorMapper::mapAuthorEntityToAuthor)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid author Id")));
+                .orElse(null));
     }
 }
