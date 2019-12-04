@@ -2,6 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header"></head>
 <nav th:replace="fragments/header :: nav"></nav>
-
-<footer th:replace="fragments/footer :: footer"> </footer>
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div th:if="${errorMessage != null}" th:text="${errorMessage}"
+             class="col-6 mt-5 alert alert-danger" role="alert">
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
 </html>

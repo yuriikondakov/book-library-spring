@@ -2,19 +2,14 @@
 <head th:replace="fragments/header :: header"></head>
 <nav th:replace="fragments/header :: nav"></nav>
 <div class="container">
-    <div class="row">
+    <div class="row" th:if="${session.user} == null">
         <div class="col-3"></div>
         <div class="col-6 mt-5">
             <form th:action="@{/login}" method="post">
                 <div class="form-group">
                     <label for="exampleInputEmail1" th:text="#{EnterEmail}"></label>
                     <input type="email" class="form-control" name="email" id="exampleInputEmail1"
-                           aria-describedby="emailHelp" th:placeholder="#{EnterEmail}" value="user@gmail.com"
-                           required
-                           autofocus>
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                        else.
-                    </small>
+                           aria-describedby="emailHelp" th:placeholder="#{EnterEmail}" required autofocus>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1" th:text="#{Password}"></label>
