@@ -1,5 +1,6 @@
 package ua.edu.library.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -7,26 +8,25 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ua.edu.library.domain.Book;
+import ua.edu.library.entity.AuthorEntity;
+import ua.edu.library.entity.BookEntity;
 import ua.edu.library.mapper.BookMapper;
+import ua.edu.library.repository.AuthorRepository;
 import ua.edu.library.repository.BookRepository;
 import ua.edu.library.service.BookService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
+    private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-
-    @Autowired
-    public BookServiceImpl(BookRepository bookEntityRepository, BookMapper bookMapper) {
-        this.bookRepository = bookEntityRepository;
-        this.bookMapper = bookMapper;
-
-    }
 
     @Override
     public Book findById(Integer id) {
@@ -54,6 +54,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void saveBook(Book book) {
-        bookRepository.save(bookMapper.mapBookToBookEntity(book));
+        BookEntity bookEntity = bookMapper.mapBookToBookEntity(book);
+        List<AuthorEntity> authorList = new ArrayList<>();
+        authorList.add(authorRepository.findById(book.getAuthors().get(0).getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid author Id ")));
+        bookEntity.setAuthors(authorList);
+        bookRepository.save(bookEntity);
     }
 }

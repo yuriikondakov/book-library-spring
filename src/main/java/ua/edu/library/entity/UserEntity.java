@@ -35,7 +35,7 @@ public class UserEntity {
     @Column(name="password", nullable = false)
     private String password;
 
-    @Column(name="phoneNumber")
+    @Column(name="phoneNumber", nullable = false, length = 16)
     private String phoneNumber;
 
     @Column(name="role",  nullable = false, length = 5)

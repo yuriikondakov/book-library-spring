@@ -10,12 +10,14 @@
                     <label for="InputName" th:text="#{UserName}"></label>
                     <input type="text" class="form-control" th:field="*{name}" id="InputName"
                            th:placeholder="#{UserName}" required autofocus>
+                    <div class="help-block with-errors text-danger"></div>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail1">Email address</label>
                     <input type="email" class="form-control" id="InputEmail1"
                            aria-describedby="emailHelp1" th:placeholder="#{EnterEmail}" th:field="*{email}" required>
                     <div class="alert alert-danger" th:uerrors="*{email}"></div>
+                    <div class="help-block with-errors text-danger"></div>
                 </div>
                 <div class="form-group">
                     <label for="InputPassword" th:text="#{Password}"></label>
@@ -28,11 +30,19 @@
                     <input type="password" class="form-control" data-th-name="confirmPassword"
                            id="inputPasswordConfirm" data-match="#InputPassword"
                            data-match-error="Whoops, these don't match" th:placeholder="#{Password}" required>
-                    <div class="help-block with-errors"></div>
+                    <div class="help-block with-errors text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPhone" th:text="#{PhoneNumber}"></label>
+                    <input id="inputPhone" data-minlength="16" type="text" class="form-control bfh-phone"
+                           th:field="*{phoneNumber}" name="phone" th:placeholder="12345678" data-format="+38(ddd)ddd-dddd" required>
                 </div>
                 <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 <input type="hidden" data-th-name="role" value="USER">
                 <button type="submit" class="btn btn-primary" th:text="#{Signup}"></button>
+                <a href="/login" class="btn btn-success ml-3" th:if="${successMessage} != null"
+                   th:text="#{SignIn}">
+                </a>
                 <div class="alert alert-success mt-3" role="alert"
                      th:if="${successMessage} != null" th:utext="${successMessage}">
                 </div>
@@ -42,5 +52,6 @@
     </div>
 </div>
 <footer th:replace="fragments/footer :: footer"></footer>
+<script type="text/javascript" th:src="@{/js/bootstrap-formhelpers-phone.js}"></script>
 </html>
 

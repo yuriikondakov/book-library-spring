@@ -54,6 +54,9 @@
                         <a class="dropdown-item" href="/admin/addbook"
                            th:if="'ADMIN' eq ${session.user.role.toString()}" th:text="#{AddBook}">
                         </a>
+                        <a class="dropdown-item" href="/admin/addauthor"
+                           th:if="'ADMIN' eq ${session.user.role.toString()}" th:text="#{AddAuthor}">
+                        </a>
                     </div>
                 </li>
             </ul>

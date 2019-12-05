@@ -3,6 +3,7 @@ package ua.edu.library.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.edu.library.domain.Author;
+import ua.edu.library.entity.AuthorEntity;
 import ua.edu.library.mapper.AuthorMapper;
 import ua.edu.library.repository.AuthorRepository;
 import ua.edu.library.service.AuthorService;
@@ -30,5 +31,19 @@ public class AuthorServiceImpl implements AuthorService {
         return Collections.singletonList(authorRepository.findById(id)
                 .map(authorMapper::mapAuthorEntityToAuthor)
                 .orElse(null));
+    }
+
+    @Override
+    public boolean save(Author author) {
+        if (isAlreadyPresent(author)) {
+            return false;
+        }
+        authorRepository.save(authorMapper.mapAuthorToAuthorEntity(author));
+        return true;
+    }
+
+    @Override
+    public boolean isAlreadyPresent(Author author) {
+        return authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName()).isPresent();
     }
 }

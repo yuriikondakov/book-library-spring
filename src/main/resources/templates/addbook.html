@@ -7,7 +7,10 @@
             <h5 class="card-header" th:text="#{AddingBook}"></h5>
             <div class="card-body">
                 <form th:action="@{/admin/addbook}" method="post" th:object="${book}">
-                    <div class="alert alert-success" role="alert" th:if="${param.addBookSuccessful}"></div>
+                    <div class="alert alert-success" role="alert" th:if="${param.addBookSuccessful != null}"
+                    th:text="${param.addBookSuccessful}"></div>
+                    <div class="alert alert-success" role="alert" th:if="${param.addAuthorMessage != null}"
+                         th:text="${param.addAuthorMessage}"></div>
                     <div class="form-group">
                         <label for="FormControlSelect1" th:text="#{Author}"></label>
                         <select class="form-control" th:name="authorId" id="FormControlSelect1">

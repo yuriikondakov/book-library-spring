@@ -10,4 +10,7 @@ public interface AuthorService {
 
     List<Author> getAuthorById(Integer id);
 
+    boolean save(Author author);
+
+    boolean isAlreadyPresent(Author author);
 }
