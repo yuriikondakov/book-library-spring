@@ -2,6 +2,12 @@ package ua.edu.library.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import ua.edu.library.domain.BookTracking;
 import ua.edu.library.domain.User;
@@ -14,8 +20,9 @@ import ua.edu.library.service.BookService;
 import ua.edu.library.service.BookTrackingService;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookTrackingServiceImpl implements BookTrackingService {
@@ -32,7 +39,7 @@ public class BookTrackingServiceImpl implements BookTrackingService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id")));
         bookTrackingEntity.setBookEntity(bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id")));
-        bookTrackingEntity.setIssue_date(LocalDate.now());
+        bookTrackingEntity.setIssueDate(LocalDate.now());
         bookTrackingRepository.save(bookTrackingEntity);
     }
 
@@ -49,5 +56,22 @@ public class BookTrackingServiceImpl implements BookTrackingService {
         return bookTrackingRepository.findById(bookTrackingId)
                 .map(bookTrackingMapper::mapBookTrackingEntityToBookTracking)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid bookTracking Id"));
+    }
+
+    @Override
+    public Page<BookTracking> getRegister(Pageable pageable) {
+
+        int currentPage = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        int size = (int) bookTrackingRepository.countByReturnDate(null);
+
+        Pageable sortByIssueDate = PageRequest.of(currentPage,pageSize,
+                Sort.by(Sort.Direction.ASC, "issueDate"));
+        List<BookTracking> bookTrackingList = bookTrackingRepository.findAllByReturnDate(null, sortByIssueDate)
+                .stream()
+                .map(bookTrackingMapper::mapBookTrackingEntityToBookTracking)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(bookTrackingList, PageRequest.of(currentPage, pageSize), size);
     }
 }

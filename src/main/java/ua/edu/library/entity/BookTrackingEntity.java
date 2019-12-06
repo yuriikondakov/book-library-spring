@@ -34,7 +34,7 @@ public class BookTrackingEntity {
     private BookEntity bookEntity;
 
     @Column(name = "issue_date", nullable = false)
-    private LocalDate issue_date;
+    private LocalDate issueDate;
 
     @Column(name = "return_date")
     private LocalDate returnDate;

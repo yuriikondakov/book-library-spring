@@ -20,7 +20,7 @@ public class BookTracking {
     private Book book;
 
     @NotNull
-    private LocalDate issue_date;
+    private LocalDate issueDate;
 
-    private LocalDate return_date;
+    private LocalDate returnDate;
 }

@@ -1,0 +1,41 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<nav th:replace="fragments/header :: nav"></nav>
+<div class="container">
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th th:text="#{Id}"></th>
+                <th th:text="#{UserName}"></th>
+                <th th:text="#{PhoneNumber}"></th>
+                <th th:text="#{BookName}"></th>
+                <th th:text="#{IssueDate}"></th>
+                <th th:text="#{ShouldReturnDate}"></th>
+            </tr>
+            </thead>
+            <tr th:each="bookTracking : ${bookTrackings}">
+                <td><span th:text="${bookTracking.id}"></span></td>
+                <td><span th:text="${bookTracking.user.name}"></span></td>
+                <td><span th:text="${bookTracking.user.phoneNumber}"></span></td>
+                <td><span th:text="${bookTracking.book.name}"></span></td>
+                <td><span th:text="${bookTracking.issueDate}"></span></td>
+                <td><span th:classappend="${{bookTracking.issueDate.plusMonths(1)<today}} ? text-danger : text-success"
+                        th:text="${bookTracking.issueDate.plusMonths(1)}"></span></td>
+            </tr>
+        </table>
+        <nav aria-label="page navigation" th:if="${bookTrackings.totalPages > 0}" >
+            <ul class="pagination">
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber==bookTrackings.number + 1} ? active">
+                    <a class="page-link"
+                       th:href="@{/admin/register(size=${bookTrackings.size}, page=${pageNumber})}"
+                       th:text="${pageNumber}">
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+

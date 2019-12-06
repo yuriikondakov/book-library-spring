@@ -1,7 +1,7 @@
 package ua.edu.library.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
@@ -36,16 +37,21 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> findPaginated(Pageable pageable) {
+    public List<Book> getAll() {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::mapBookEntityToBook).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Book> getAll(Pageable pageable) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
-        List<Book> list = null;
+        List<Book> list;
         int size = (int) bookRepository.count();
         if (size < startItem) {
             list = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, size);
             list = bookRepository.findAll(pageable).stream()
                     .map(bookMapper::mapBookEntityToBook).collect(Collectors.toList());
         }
@@ -60,5 +66,24 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid author Id ")));
         bookEntity.setAuthors(authorList);
         bookRepository.save(bookEntity);
+    }
+
+    public void updateBook(Book book) {
+        BookEntity bookEntity = bookMapper.mapBookToBookEntity(book);
+       /* List<AuthorEntity> authorList = new ArrayList<>();
+        authorList.add(authorRepository.findById(book.getAuthors().get(0).getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid author Id ")));
+        bookEntity.setAuthors(authorList);*/
+        bookRepository.save(bookEntity);
+    }
+
+    @Override
+    public Page<Book> getAllWithSearch(String searchField, Pageable pageable) {
+        List<Book> books = bookRepository
+                .findByNameContainingOrDescriptionContaining(searchField, searchField, pageable)
+                .stream()
+                .map(bookMapper::mapBookEntityToBook)
+                .collect(Collectors.toList());
+        return new PageImpl<>(books, pageable, books.size());
     }
 }

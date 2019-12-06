@@ -19,7 +19,7 @@ public class BookTrackingMapper {
                 bookTrackingEntity.getId(),
                 userMapper.mapUserEntityToUser(bookTrackingEntity.getUserEntity()),
                 bookMapper.mapBookEntityToBook(bookTrackingEntity.getBookEntity()),
-                bookTrackingEntity.getIssue_date(),
+                bookTrackingEntity.getIssueDate(),
                 bookTrackingEntity.getReturnDate()
         );
     }
@@ -28,8 +28,8 @@ public class BookTrackingMapper {
         BookTrackingEntity bookTrackingEntity = new BookTrackingEntity();
         bookTrackingEntity.setUserEntity(userMapper.mapUserToUserEntity(bookTracking.getUser()));
         bookTrackingEntity.setBookEntity(bookMapper.mapBookToBookEntity(bookTracking.getBook()));
-        bookTrackingEntity.setIssue_date(bookTracking.getIssue_date());
-        bookTrackingEntity.setReturnDate(bookTracking.getReturn_date());
+        bookTrackingEntity.setIssueDate(bookTracking.getIssueDate());
+        bookTrackingEntity.setReturnDate(bookTracking.getReturnDate());
         log.debug(bookTrackingEntity.toString());
         return bookTrackingEntity;
     }

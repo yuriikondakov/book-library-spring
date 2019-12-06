@@ -2,6 +2,7 @@ package ua.edu.library.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,13 +48,15 @@ public class BookController {
     }
 
     @GetMapping(value = "/book")
-    public ModelAndView getAllBooks(@RequestParam("page") Integer page,
-                                    @RequestParam("size") Integer size) {
+    public ModelAndView getAllBooks(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                    @RequestParam(name = "size", defaultValue = "10") Integer size,
+                                    @RequestParam(name = "searchField", defaultValue = "") String searchField) {
         ModelAndView modelAndView = new ModelAndView();
-        log.debug("Get book by id");
-        int currentPage = (page == null) ? 1 : page;
-        int pageSize = (size == null) ? 10 : size;
-        Page<Book> bookPage = bookService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        Page<Book> bookPage;
+        if ("".equals(searchField)) {
+            bookPage = bookService.getAll(PageRequest.of(page - 1, size));
+        } else bookPage = bookService.getAllWithSearch(searchField, PageRequest.of(page - 1, size));
+
         modelAndView.addObject("bookPage", bookPage);
 
         int totalPages = bookPage.getTotalPages();
@@ -70,7 +73,6 @@ public class BookController {
     @GetMapping("/book/{id}")
     public String getBookById(@PathVariable("id") Integer bookId, Model model) {
         User user = getUser();
-        log.debug(user.toString());
         if (user.getBookIds().stream().anyMatch(b -> b.equals(bookId))) {
             model.addAttribute("bookIsAlreadyTaken", true);
         }
@@ -91,9 +93,6 @@ public class BookController {
         Map<BookTracking, Book> userBookTrackingToUserBook = new HashMap<>();
         for (Integer bookTrackingId : getUser().getBookTrackingIds()) {
             BookTracking bookTracking = bookTrackingService.findById(bookTrackingId);
-            if (bookTracking == null) {
-                throw new RuntimeException("Error");
-            }
             userBookTrackingToUserBook.put(bookTracking, bookTracking.getBook());
         }
         model.addAttribute("userBooksMap", userBookTrackingToUserBook);
