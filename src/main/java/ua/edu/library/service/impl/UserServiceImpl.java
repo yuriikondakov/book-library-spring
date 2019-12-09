@@ -1,6 +1,7 @@
 package ua.edu.library.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.edu.library.domain.Role;
@@ -10,14 +11,17 @@ import ua.edu.library.repository.UserRepository;
 import ua.edu.library.service.UserService;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email).map(userMapper::mapUserEntityToUser).orElse(null);
+        return userRepository.findByEmail(email)
+                .map(userMapper::mapUserEntityToUser)
+                .orElse(null);
     }
 
     @Override
